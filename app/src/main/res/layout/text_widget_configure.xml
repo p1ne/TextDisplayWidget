@@ -14,7 +14,11 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/fileNameEdit" />
+        android:id="@+id/fileNameEdit"
+        android:lines="1"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,7 +31,8 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:id="@+id/refreshIntervalEdit" />
+        android:id="@+id/refreshIntervalEdit"
+        android:singleLine="true" />
 
     <Button
         android:id="@+id/add_button"

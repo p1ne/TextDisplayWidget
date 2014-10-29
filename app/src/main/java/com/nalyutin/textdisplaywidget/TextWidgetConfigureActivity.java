@@ -62,7 +62,6 @@ public class TextWidgetConfigureActivity extends Activity {
             final Context context = TextWidgetConfigureActivity.this;
 
             // When the button is clicked, store the string locally
-            //String widgetText = mAppWidgetText.getText().toString();
             saveAllPrefs(context,mAppWidgetId,mFileNameText.getText().toString(),mRefreshIntervalText.getText().toString());
 
             // It is the responsibility of the configuration activity to update the app widget

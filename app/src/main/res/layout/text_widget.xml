@@ -1,18 +1,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/widget_margin"
-    android:background="#09C">
+    android:padding="@dimen/widget_margin">
 
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:clickable="true"
-        android:enabled="true"
-        android:longClickable="true"
-        android:text="@string/textview_text" />
+        android:weightSum="1">
+
+        <TextClock
+            android:layout_width="fill_parent"
+            android:layout_height="120dp"
+            android:id="@+id/textClock"
+            android:background="#00000000"
+            android:textAlignment="center"
+            android:typeface="sans"
+            android:textSize="96dp"
+            android:gravity="center_vertical|center_horizontal" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/textView"
+            android:clickable="true"
+            android:enabled="true"
+            android:longClickable="true"
+            android:text="@string/textview_text"
+            android:textColor="#ffa0fdff"
+            android:background="#00000000"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textSize="20dp" />
+    </LinearLayout>
+
 </RelativeLayout>

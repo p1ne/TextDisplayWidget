@@ -7,8 +7,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
-
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.InjectView;
 
 /**
  * The configuration screen for the {@link TextWidget TextWidget} AppWidget.
@@ -16,8 +19,10 @@ import android.widget.EditText;
 public class TextWidgetConfigureActivity extends Activity {
 
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    EditText mFileNameText;
-    EditText mRefreshIntervalText;
+    @InjectView(R.id.fileNameEdit) EditText mFileNameText;
+    @InjectView(R.id.refreshIntervalEdit) EditText mRefreshIntervalText;
+    @InjectView(R.id.displayClockcheckBox) CheckBox mDisplayClockCheckbox;
+
     private static final String PREFS_NAME = "com.nalyutin.textdisplaywidget.TextWidget";
     private static final String PREF_PREFIX_KEY = "appwidget_";
 
@@ -29,14 +34,9 @@ public class TextWidgetConfigureActivity extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
-        // Set the result to CANCELED.  This will cause the widget host to cancel
-        // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.text_widget_configure);
-        mFileNameText = (EditText)findViewById(R.id.fileNameEdit);
-        mRefreshIntervalText = (EditText)findViewById(R.id.refreshIntervalEdit);
-        findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
 
         // Find the widget id from the intent.
         Intent intent = getIntent();
@@ -52,48 +52,74 @@ public class TextWidgetConfigureActivity extends Activity {
             return;
         }
 
-        // FIXME
-        mFileNameText.setText(loadPref(TextWidgetConfigureActivity.this, mAppWidgetId, R.id.fileNameEdit));
-        mRefreshIntervalText.setText(loadPref(TextWidgetConfigureActivity.this, mAppWidgetId, R.id.refreshIntervalEdit));
+        ButterKnife.inject(this);
     }
 
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            final Context context = TextWidgetConfigureActivity.this;
+    @OnClick(R.id.add_button) void addWidget()
+    {
+        final Context context = TextWidgetConfigureActivity.this;
 
-            // When the button is clicked, store the string locally
-            saveAllPrefs(context,mAppWidgetId,mFileNameText.getText().toString(),mRefreshIntervalText.getText().toString());
+        int refreshInterval = Integer.valueOf(mRefreshIntervalText.getText().toString());
 
-            // It is the responsibility of the configuration activity to update the app widget
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            TextWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId);
+        saveAllPrefs(context,   mAppWidgetId,
+                                mFileNameText.getText().toString(),
+                                refreshInterval,
+                                mDisplayClockCheckbox.isChecked());
 
-            // Make sure we pass back the original appWidgetId
-            Intent resultValue = new Intent();
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-            setResult(RESULT_OK, resultValue);
-            finish();
-        }
-    };
+        // It is the responsibility of the configuration activity to update the app widget
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        TextWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId);
 
-    // Write the prefix to the SharedPreferences object for this widget
-    static void saveAllPrefs(Context context, int appWidgetId, String fileName, String refreshInterval) {
+        // Make sure we pass back the original appWidgetId
+        Intent resultValue = new Intent();
+        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+        setResult(RESULT_OK, resultValue);
+        finish();
+    }
+
+    static void saveAllPrefs(Context context, int appWidgetId, String fileName, int refreshInterval, Boolean displayClock) {
+        saveStringPref(context, appWidgetId, R.id.fileNameEdit, fileName);
+        saveIntPref(context, appWidgetId, R.id.refreshIntervalEdit, refreshInterval);
+        saveBooleanPref(context, appWidgetId, R.id.displayClockcheckBox, displayClock);
+    }
+
+    static int loadIntPref(Context context, int appWidgetId, int prefId) {
+        int prefValue;
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        prefValue = prefs.getInt(PREF_PREFIX_KEY + appWidgetId + prefId, 1);
+        return prefValue;
+    }
+
+    static void saveIntPref(Context context, int appWidgetId, int prefId, int prefValue) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putString(PREF_PREFIX_KEY + appWidgetId + R.id.fileNameEdit, fileName);
-        prefs.putString(PREF_PREFIX_KEY + appWidgetId + R.id.refreshIntervalEdit, refreshInterval);
+        prefs.putInt(PREF_PREFIX_KEY + appWidgetId + prefId, prefValue);
         prefs.commit();
     }
 
-    // Read the prefix from the SharedPreferences object for this widget.
-    // If there is no preference saved, get the default from a resource
-    static String loadPref(Context context, int appWidgetId, int prefId) {
+    static Boolean loadBooleanPref(Context context, int appWidgetId, int prefId) {
+        Boolean prefValue;
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String prefValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId + prefId, null);
-        if (prefValue == null) {
-            return "";
-        } else {
-            return prefValue;
-        }
+        prefValue = prefs.getBoolean(PREF_PREFIX_KEY + appWidgetId + prefId, false);
+        return prefValue;
+    }
+
+    static void saveBooleanPref(Context context, int appWidgetId, int prefId, Boolean prefValue) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.putBoolean(PREF_PREFIX_KEY + appWidgetId + prefId, prefValue);
+        prefs.commit();
+    }
+
+    static String loadStringPref(Context context, int appWidgetId, int prefId) {
+        String prefValue;
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        prefValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId + prefId, "");
+        return prefValue;
+    }
+
+    static void saveStringPref(Context context, int appWidgetId, int prefId, String prefValue) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.putString(PREF_PREFIX_KEY + appWidgetId + prefId, prefValue);
+        prefs.commit();
     }
 
     static void deletePref(Context context, int appWidgetId, int prefId) {

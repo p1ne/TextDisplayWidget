@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,13 +14,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Filename to display"
-        android:id="@+id/fileNameLabel" />
+        android:text="Filename or URL to display" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/fileNameEdit"
+        android:id="@+id/file_name"
         android:lines="1"
         android:maxLines="1"
         android:selectAllOnFocus="true"
@@ -23,23 +28,88 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Refresh interval (seconds)"
-        android:id="@+id/refreshIntervalLabel" />
+        android:text="Refresh interval (seconds)" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:id="@+id/refreshIntervalEdit"
+        android:id="@+id/refresh_interval"
         android:singleLine="true" />
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Display Clock"
-        android:id="@+id/displayClockcheckBox"
+        android:id="@+id/display_clock"
         android:checked="false" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Foreground color" />
+
+            <com.larswerkman.holocolorpicker.ColorPicker
+                android:id="@+id/foreground_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <com.larswerkman.holocolorpicker.SVBar
+                android:id="@+id/foreground_valuebar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible" />
+
+            <com.larswerkman.holocolorpicker.OpacityBar
+                android:id="@+id/foreground_opacitybar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Background color" />
+
+            <com.larswerkman.holocolorpicker.ColorPicker
+                android:id="@+id/background_picker"
+                android:layout_width="wrap_content"
+               android:layout_height="wrap_content" />
+
+            <com.larswerkman.holocolorpicker.SVBar
+                android:id="@+id/background_valuebar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible" />
+
+            <com.larswerkman.holocolorpicker.OpacityBar
+                android:id="@+id/background_opacitybar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible" />
+
+        </LinearLayout>
+    </LinearLayout>
 
     <Button
         android:id="@+id/add_button"
@@ -47,5 +117,5 @@
         android:layout_height="wrap_content"
         android:text="@string/add_widget"
         android:layout_marginTop="8dp" />
-
 </LinearLayout>
+</ScrollView>

@@ -8,11 +8,11 @@ import java.io.IOException;
 import android.os.Environment;
 
 /**
- * Created by b01549a on 29.10.2014.
+ * Created by pine on 29.10.2014.
  */
 public class TextFileReader {
 
-    public static String getFileContents(String fileName) {
+    public static String getData(String fileName) {
         File sdCard = Environment.getExternalStorageDirectory();
 
         File file = new File(sdCard,fileName);

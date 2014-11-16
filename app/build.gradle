@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.nalyutin.textdisplaywidget"
-        minSdkVersion 15
+        minSdkVersion 17
         targetSdkVersion 20
         versionCode 1
         versionName "1.0"
@@ -22,4 +22,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.jakewharton:butterknife:6.0.0'
+    compile 'com.squareup.okhttp:okhttp:2.1.0'
+    compile 'com.larswerkman:HoloColorPicker:1.4'
 }
